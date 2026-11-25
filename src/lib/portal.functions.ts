@@ -8,13 +8,41 @@ import { z } from "zod";
  * secure secret store inside the handler.
  */
 
-const MERCHANT_ID = "2000162100241";
+export const MERCHANT_PRODUCTS: Record<string, string> = {
+  "2000162100241": "DUITJOM",
+  "825538292000": "RCASH",
+  "730114885201": "LAJUDANA",
+  "648209173355": "PINJAMGO",
+  "915374620088": "ADAWANG",
+  "204867351199": "MESRA DUIT",
+  "573928104466": "QUICKLOAN",
+  "386150729744": "EZYLOAN",
+};
+
+const isMerchant = (id: string) => Object.hasOwn(MERCHANT_PRODUCTS, id.trim());
+
+function passkeyFor(id: string): string | undefined {
+  const raw = process.env["MERCHANT_PASSKEYS"];
+  if (raw) {
+    try {
+      const map = JSON.parse(raw) as Record<string, string>;
+      const v = map[id.trim()];
+      if (typeof v === "string" && v !== "") return v;
+    } catch {
+      console.error("MERCHANT_PASSKEYS is not valid JSON");
+    }
+  }
+  return undefined;
+}
 
 const lookupSchema = z.object({ merchantId: z.string().trim().min(1).max(64) });
 
 export const findMerchant = createServerFn({ method: "POST" })
   .inputValidator((data: { merchantId: string }) => lookupSchema.parse(data))
-  .handler(async ({ data }) => ({ valid: data.merchantId.trim() === MERCHANT_ID }));
+  .handler(async ({ data }) => ({
+    valid: isMerchant(data.merchantId),
+    product: MERCHANT_PRODUCTS[data.merchantId.trim()] ?? null,
+  }));
 
 const verifySchema = z.object({
   merchantId: z.string().trim().min(1).max(64),
@@ -24,10 +52,10 @@ const verifySchema = z.object({
 export const verifyMerchant = createServerFn({ method: "POST" })
   .inputValidator((data: { merchantId: string; passkey?: string }) => verifySchema.parse(data))
   .handler(async ({ data }) => {
-    const idOk = data.merchantId.trim() === MERCHANT_ID;
+    const idOk = isMerchant(data.merchantId);
     if (data.passkey === undefined) return { valid: idOk, configured: true };
 
-    const expected = process.env["MERCHANT_PASSKEY"];
+    const expected = passkeyFor(data.merchantId);
     if (expected === undefined || expected === "") {
       // No credential configured yet: refuse instead of guessing.
       return { valid: false, configured: false };
