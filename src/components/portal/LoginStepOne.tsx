@@ -79,7 +79,7 @@ export default function LoginStepOne({ onContinue }: { onContinue: (merchantId: 
       <div className="mb-6 rounded-2xl border bg-secondary/40 px-5 py-6 text-center">
         <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-2xl border bg-surface-bright p-3 shadow-sm">
           <img
-            src="https://moneylinecredit.my/wp-content/uploads/2021/09/logo_mlc_512_red.png"
+            src="/merchant-logo.png"
             alt="Merchant logo"
             className="h-full w-full object-contain"
           />

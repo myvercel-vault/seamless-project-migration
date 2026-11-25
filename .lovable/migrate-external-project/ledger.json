@@ -4,14 +4,14 @@
     "source": "React 18/Vite/Zite monorepo",
     "outcome": "migrate",
     "status": "in_progress",
-    "next_action": "Port reachable merchant lookup, verification, registration and maintenance screens to TanStack; preserve dormant screens separately."
+    "next_action": "Reachable flow ported and browser-verified (sign-in, merchant card, passkey, client details, dashboard, profile, report); dormant admin-only screens still to review."
   },
   {
     "capability": "schema",
     "source": ".zite/db.ts: DuitJomCrmData, Salesforcedatabase",
     "outcome": "migrate",
     "status": "in_progress",
-    "next_action": "Create Cloud equivalents without credential columns."
+    "next_action": "Registrations and report requests now stored in Cloud with the PIN hashed; source CRM/Salesforce tables still to recreate without credential columns."
   },
   {
     "capability": "records",
@@ -46,7 +46,7 @@
     "source": "Gmail sendRegistration/requestReport",
     "outcome": "preserve",
     "status": "pending",
-    "next_action": "Reconnect Gmail OAuth and verify delivery; never email PINs/passwords."
+    "next_action": "Registration and report requests are stored in Cloud instead of emailed; Gmail delivery still to reconnect; never email PINs/passwords."
   },
   {
     "capability": "public endpoints",
@@ -81,7 +81,7 @@
     "source": "Legacy admin credentials and runtime values",
     "outcome": "replace",
     "status": "in_progress",
-    "next_action": "Do not import legacy credentials or runtime metadata."
+    "next_action": "Merchant passkey held in the secure secret store and compared server-side; admin credentials still to be added there before the admin dialog works."
   },
   {
     "capability": "cutover",
@@ -95,6 +95,6 @@
     "source": "Archive tests and browser flow",
     "outcome": "verify",
     "status": "in_progress",
-    "next_action": "Verify mobile/desktop, invalid lookup, sign-in, Cloud isolation; imported identity/email verification waits on exports."
+    "next_action": "Desktop flow verified in a live browser: merchant lookup, wrong passkey rejected, invalid merchant ID rejected, registration and report rows written to Cloud. Mobile layout and cross-user isolation still to check."
   }
 ]

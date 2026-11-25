@@ -44,7 +44,7 @@ export const PRODUCT_RECORD = {
 
 export const PROFILE_COMPANY = {
   ...COMPANY,
-  logo: "https://moneylinecredit.my/wp-content/uploads/2021/09/logo_mlc_512_red.png",
+  logo: "/merchant-logo.png",
   service: "Finance Product",
   origin: "PENANG MALAYSIA",
   address:
