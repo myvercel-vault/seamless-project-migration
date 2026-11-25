@@ -71,6 +71,8 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-surface-bright: var(--surface-bright);
+  --color-signal-red: var(--signal-red);
+  --color-signal-red-foreground: var(--signal-red-foreground);
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
 }
@@ -113,6 +115,8 @@
   --gradient-text: linear-gradient(180deg, oklch(1 0 0), oklch(0.6 0 0));
   --shadow-glow: 0 0 40px -10px oklch(1 0 0 / 25%);
   --surface-bright: oklch(0.985 0 0);
+  --signal-red: oklch(0.58 0.24 27);
+  --signal-red-foreground: oklch(0.99 0 0);
 }
 
 .dark {
@@ -152,6 +156,8 @@
   --gradient-text: linear-gradient(180deg, oklch(1 0 0), oklch(0.6 0 0));
   --shadow-glow: 0 0 40px -10px oklch(1 0 0 / 25%);
   --surface-bright: oklch(0.985 0 0);
+  --signal-red: oklch(0.58 0.24 27);
+  --signal-red-foreground: oklch(0.99 0 0);
 }
 
 @keyframes fade-rise {
@@ -237,4 +243,58 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+
+/* Light sweep across buttons, repeating every 1.5s. */
+@keyframes shine-sweep {
+  0% {
+    transform: translateX(-130%) skewX(-20deg);
+  }
+  70%,
+  100% {
+    transform: translateX(130%) skewX(-20deg);
+  }
+}
+
+.shine-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  --shine-color: oklch(1 0 0 / 0.6);
+}
+
+.shine-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, var(--shine-color), transparent);
+  transform: translateX(-130%) skewX(-20deg);
+  animation: shine-sweep 1.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.5);
+  }
+}
+
+.status-pulse {
+  animation: status-pulse 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine-btn::after,
+  .status-pulse {
+    animation: none;
+  }
 }

@@ -22,26 +22,23 @@ export default function LoginStepTwo({
 }: {
   merchantId: string;
   role: string;
-  onDone: (email: string) => void;
+  onDone: () => void;
 }) {
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
-  const [pin2, setPin2] = useState("");
   const [showPin, setShowPin] = useState(false);
-  const [showPin2, setShowPin2] = useState(false);
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
 
   const emailOk = /^\S+@\S+\.\S+$/.test(email);
-  const pinMismatch = pin2.length === 6 && pin !== pin2;
-  const valid = phone.replace(/\D/g, "").length >= 8 && pin.length === 6 && pin === pin2 && emailOk;
+  const valid = phone.replace(/\D/g, "").length >= 8 && pin.length === 6 && emailOk;
 
   const submit = async () => {
     setSending(true);
     try {
       await submitRegistration({ data: { merchantId, role, phone, pin, email } });
       toast.success("Maklumat anda telah dihantar.");
-      onDone(email);
+      onDone();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Gagal menghantar.");
     } finally {
@@ -84,20 +81,11 @@ export default function LoginStepTwo({
 
       <div className="space-y-1.5">
         <Label>PIN ACCESS*</Label>
-        <p className="text-xs text-muted-foreground">Create your new access PIN to continue</p>
+        <p className="text-xs text-muted-foreground">Enter the 6-digit access PIN given to you by us</p>
         <div className="flex items-center gap-3">
           <CodeBoxes value={pin} onChange={setPin} masked={!showPin} />
           <Eyeball show={showPin} toggle={() => setShowPin(!showPin)} />
         </div>
-      </div>
-
-      <div className="space-y-1.5">
-        <Label>Re-Enter PIN ACCESS*</Label>
-        <div className="flex items-center gap-3">
-          <CodeBoxes value={pin2} onChange={setPin2} masked={!showPin2} invalid={pinMismatch} />
-          <Eyeball show={showPin2} toggle={() => setShowPin2(!showPin2)} />
-        </div>
-        {pinMismatch && <p className="text-xs text-destructive">PIN does not match.</p>}
       </div>
 
       <div className="space-y-1.5">

