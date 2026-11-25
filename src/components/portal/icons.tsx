@@ -2,10 +2,11 @@
 
 export function LogoMark({ className = "" }: { className?: string }) {
   return (
-    <div role="img" aria-label="DuitJom" className={`flex items-baseline gap-1.5 ${className}`}>
-      <span className="h-2.5 w-2.5 translate-y-[-1px] rounded-full bg-foreground" aria-hidden />
-      <span className="text-[17px] font-bold tracking-tight text-foreground">duitjom</span>
-    </div>
+    <img
+      src="https://wp.sfdcdigital.com/en-us/wp-content/uploads/sites/4/2024/11/logo-salesforce.svg?w=1024"
+      alt="Salesforce"
+      className={`h-8 w-auto ${className}`}
+    />
   );
 }
 
