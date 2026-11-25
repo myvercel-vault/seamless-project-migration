@@ -1,0 +1,100 @@
+[
+  {
+    "capability": "code",
+    "source": "React 18/Vite/Zite monorepo",
+    "outcome": "migrate",
+    "status": "in_progress",
+    "next_action": "Port reachable merchant lookup, verification, registration and maintenance screens to TanStack; preserve dormant screens separately."
+  },
+  {
+    "capability": "schema",
+    "source": ".zite/db.ts: DuitJomCrmData, Salesforcedatabase",
+    "outcome": "migrate",
+    "status": "in_progress",
+    "next_action": "Create Cloud equivalents without credential columns."
+  },
+  {
+    "capability": "records",
+    "source": "No database record export bundled; private client constants in source",
+    "outcome": "migrate",
+    "status": "pending",
+    "next_action": "Provide sanitized Zite CSV/JSON record exports; do not publish embedded private client constants."
+  },
+  {
+    "capability": "auth identities",
+    "source": "Zite auth with magic link and Google; no user export",
+    "outcome": "migrate",
+    "status": "pending",
+    "next_action": "Provide original user IDs/emails/profiles/memberships; verified-email mapping required."
+  },
+  {
+    "capability": "authorization",
+    "source": "Hardcoded shared merchant credential and environment admin password",
+    "outcome": "replace",
+    "status": "in_progress",
+    "next_action": "Replace shared credentials with verified Cloud identity, protected membership and role tables."
+  },
+  {
+    "capability": "uploaded file bytes",
+    "source": "No bundled uploaded object bytes; remote branding URLs",
+    "outcome": "preserve",
+    "status": "in_progress",
+    "next_action": "Download original branding to asset CDN."
+  },
+  {
+    "capability": "external providers",
+    "source": "Gmail sendRegistration/requestReport",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "Reconnect Gmail OAuth and verify delivery; never email PINs/passwords."
+  },
+  {
+    "capability": "public endpoints",
+    "source": "Zite generated API paths, unknown external callers",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "Need original published URL and confirmation of callers for cutover; implement supported behavior in server functions."
+  },
+  {
+    "capability": "callbacks",
+    "source": "Zite authentication callbacks",
+    "outcome": "replace",
+    "status": "in_progress",
+    "next_action": "Cloud email/Google callbacks with first-login password setup."
+  },
+  {
+    "capability": "webhooks",
+    "source": "No webhook declarations or call sites",
+    "outcome": "none",
+    "status": "verified",
+    "next_action": "None detected."
+  },
+  {
+    "capability": "schedules",
+    "source": "No schedules or automation call sites",
+    "outcome": "none",
+    "status": "verified",
+    "next_action": "None detected."
+  },
+  {
+    "capability": "secrets",
+    "source": "Legacy admin credentials and runtime values",
+    "outcome": "replace",
+    "status": "in_progress",
+    "next_action": "Do not import legacy credentials or runtime metadata."
+  },
+  {
+    "capability": "cutover",
+    "source": "Zite PWA/SEO configuration; no live source URL supplied",
+    "outcome": "pending",
+    "status": "pending",
+    "next_action": "Publish and update original links/callers; verify installability."
+  },
+  {
+    "capability": "verification",
+    "source": "Archive tests and browser flow",
+    "outcome": "verify",
+    "status": "in_progress",
+    "next_action": "Verify mobile/desktop, invalid lookup, sign-in, Cloud isolation; imported identity/email verification waits on exports."
+  }
+]
