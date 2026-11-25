@@ -55,9 +55,9 @@ export const verifyAdmin = createServerFn({ method: "POST" })
     return { valid: data.username === user && data.password === pass, configured: true };
   });
 
-export const checkDashboardAvailability = createServerFn({ method: "POST" })
-  .inputValidator((data: Record<string, never>) => data ?? {})
-  .handler(async () => ({ available: false }));
+export const checkDashboardAvailability = createServerFn({ method: "POST" }).handler(async () => ({
+  available: false,
+}));
 
 const registrationSchema = z.object({
   merchantId: z.string().trim().min(1).max(64),

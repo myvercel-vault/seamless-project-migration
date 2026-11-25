@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Toaster } from "@/components/ui/sonner";
 import TopNav from "@/components/portal/TopNav";
 import LoginStepOne from "@/components/portal/LoginStepOne";
 import LoginStepTwo from "@/components/portal/LoginStepTwo";
@@ -70,7 +69,6 @@ function Portal() {
         <main>
           <SectionView section={section} session={session} onSelect={setSection} onQuit={logout} />
         </main>
-        <Toaster />
       </div>
     );
   }
@@ -106,7 +104,6 @@ function Portal() {
           {step === 1 && <SignInGuide />}
         </div>
       </main>
-      <Toaster />
     </div>
   );
 }

@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      client_registrations: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          merchant_id: string
+          phone: string
+          pin_hash: string
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          merchant_id: string
+          phone: string
+          pin_hash: string
+          role?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          merchant_id?: string
+          phone?: string
+          pin_hash?: string
+          role?: string
+        }
+        Relationships: []
+      }
+      report_requests: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          my_kad: string
+          phone: string
+          product: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          my_kad: string
+          phone: string
+          product: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          my_kad?: string
+          phone?: string
+          product?: string
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
