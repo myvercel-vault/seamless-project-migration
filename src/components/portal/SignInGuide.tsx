@@ -14,7 +14,7 @@ const STEPS: { icon: typeof LogIn; title: string; detail: string }[] = [
   {
     icon: UserCheck,
     title: "Complete your client details",
-    detail: "Add your phone number, create a 6-digit access PIN and confirm your e-mail to continue.",
+    detail: "Add your phone number, enter the 6-digit access PIN we gave you and your e-mail to continue.",
   },
   {
     icon: LogIn,
